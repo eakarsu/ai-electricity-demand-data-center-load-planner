@@ -270,11 +270,214 @@ const aiFeatures = [
   },
 ] as const;
 
-const allFeatures = [...features, ...aiFeatures];
+const supplementalFeatures = [
+  {
+    slug: "load-forecast-scenarios",
+    title: "Load Forecast Scenarios",
+    href: "/load-forecast-scenarios",
+    category: "Planning",
+    icon: ShieldCheck,
+    summary: "Load Forecast Scenarios workspace for domain workflows, approvals, evidence, and reporting in Electricity Demand Data Center Load Planner.",
+    bullets: ["Load Forecast Scenarios queue","Subfeature work items","Audit-ready output"],
+    metrics: [
+      { label: "Load Forecast Scenarios", value: "90", note: 'Active records' },
+      { label: 'Exceptions', value: "3", note: 'Need review' },
+      { label: 'Due Soon', value: "5", note: 'Next 14 days' },
+    ],
+  },
+  {
+    slug: "interconnect-queue",
+    title: "Interconnect Queue",
+    href: "/interconnect-queue",
+    category: "Utilities",
+    icon: Workflow,
+    summary: "Interconnect Queue workspace for domain workflows, approvals, evidence, and reporting in Electricity Demand Data Center Load Planner.",
+    bullets: ["Interconnect Queue queue","Subfeature work items","Audit-ready output"],
+    metrics: [
+      { label: "Interconnect Queue", value: "99", note: 'Active records' },
+      { label: 'Exceptions', value: "4", note: 'Need review' },
+      { label: 'Due Soon', value: "6", note: 'Next 14 days' },
+    ],
+  },
+  {
+    slug: "capacity-reservation",
+    title: "Capacity Reservation",
+    href: "/capacity-reservation",
+    category: "Finance",
+    icon: BarChart3,
+    summary: "Capacity Reservation workspace for financial exposure, cost movement, approval thresholds, variance review, and executive reporting in Electricity Demand Data Center Load Planner.",
+    bullets: ["Capacity Reservation queue","Subfeature work items","Audit-ready output"],
+    metrics: [
+      { label: "Capacity Reservation", value: "108", note: 'Active records' },
+      { label: 'Exceptions', value: "5", note: 'Need review' },
+      { label: 'Due Soon', value: "7", note: 'Next 14 days' },
+    ],
+  },
+  {
+    slug: "ppa-energy-procurement",
+    title: "PPA & Energy Procurement",
+    href: "/ppa-energy-procurement",
+    category: "Energy",
+    icon: ClipboardList,
+    summary: "PPA & Energy Procurement workspace for domain workflows, approvals, evidence, and reporting in Electricity Demand Data Center Load Planner.",
+    bullets: ["PPA & Energy Procurement queue","Subfeature work items","Audit-ready output"],
+    metrics: [
+      { label: "PPA & Energy Procurement", value: "117", note: 'Active records' },
+      { label: 'Exceptions', value: "6", note: 'Need review' },
+      { label: 'Due Soon', value: "8", note: 'Next 14 days' },
+    ],
+  },
+  {
+    slug: "demand-response-plan",
+    title: "Demand Response Plan",
+    href: "/demand-response-plan",
+    category: "Operations",
+    icon: CalendarCheck,
+    summary: "Demand Response Plan workspace for intake queues, assignments, SLA tracking, exception handling, stakeholder updates, and closeout evidence in Electricity Demand Data Center Load Planner.",
+    bullets: ["Demand Response Plan queue","Subfeature work items","Audit-ready output"],
+    metrics: [
+      { label: "Demand Response Plan", value: "126", note: 'Active records' },
+      { label: 'Exceptions', value: "7", note: 'Need review' },
+      { label: 'Due Soon', value: "9", note: 'Next 14 days' },
+    ],
+  },
+  {
+    slug: "grid-constraint-map",
+    title: "Grid Constraint Map",
+    href: "/grid-constraint-map",
+    category: "Planning",
+    icon: PackageCheck,
+    summary: "Grid Constraint Map workspace for domain workflows, approvals, evidence, and reporting in Electricity Demand Data Center Load Planner.",
+    bullets: ["Grid Constraint Map queue","Subfeature work items","Audit-ready output"],
+    metrics: [
+      { label: "Grid Constraint Map", value: "135", note: 'Active records' },
+      { label: 'Exceptions', value: "3", note: 'Need review' },
+      { label: 'Due Soon', value: "10", note: 'Next 14 days' },
+    ],
+  },
+  {
+    slug: "capex-scenario-board",
+    title: "Capex Scenario Board",
+    href: "/capex-scenario-board",
+    category: "Finance",
+    icon: Activity,
+    summary: "Capex Scenario Board workspace for financial exposure, cost movement, approval thresholds, variance review, and executive reporting in Electricity Demand Data Center Load Planner.",
+    bullets: ["Capex Scenario Board queue","Subfeature work items","Audit-ready output"],
+    metrics: [
+      { label: "Capex Scenario Board", value: "144", note: 'Active records' },
+      { label: 'Exceptions', value: "4", note: 'Need review' },
+      { label: 'Due Soon', value: "11", note: 'Next 14 days' },
+    ],
+  }
+] as const;
+
+const productionPlatformFeatures = [
+  {
+    slug: "enterprise-identity-access",
+    title: "Enterprise Identity & Access",
+    href: "/enterprise-identity-access",
+    category: "Production Platform",
+    icon: ShieldCheck,
+    summary: "Enterprise Identity & Access workspace for domain workflows, approvals, evidence, and reporting in Electricity Demand Data Center Load Planner.",
+    bullets: ["Production controls","Evidence tracking","Launch readiness"],
+    metrics: [
+      { label: "Enterprise Identity & Access", value: "90", note: 'Active records' },
+      { label: 'Exceptions', value: "3", note: 'Need review' },
+      { label: 'Due Soon', value: "5", note: 'Next 14 days' },
+    ],
+  },
+  {
+    slug: "connector-operations-center",
+    title: "Connector Operations Center",
+    href: "/connector-operations-center",
+    category: "Production Platform",
+    icon: Workflow,
+    summary: "Connector Operations Center workspace for domain workflows, approvals, evidence, and reporting in Electricity Demand Data Center Load Planner.",
+    bullets: ["Production controls","Evidence tracking","Launch readiness"],
+    metrics: [
+      { label: "Connector Operations Center", value: "99", note: 'Active records' },
+      { label: 'Exceptions', value: "4", note: 'Need review' },
+      { label: 'Due Soon', value: "6", note: 'Next 14 days' },
+    ],
+  },
+  {
+    slug: "audit-export-center",
+    title: "Audit Export Center",
+    href: "/audit-export-center",
+    category: "Production Platform",
+    icon: BarChart3,
+    summary: "Audit Export Center workspace for domain workflows, approvals, evidence, and reporting in Electricity Demand Data Center Load Planner.",
+    bullets: ["Production controls","Evidence tracking","Launch readiness"],
+    metrics: [
+      { label: "Audit Export Center", value: "108", note: 'Active records' },
+      { label: 'Exceptions', value: "5", note: 'Need review' },
+      { label: 'Due Soon', value: "7", note: 'Next 14 days' },
+    ],
+  },
+  {
+    slug: "notification-delivery-ledger",
+    title: "Notification Delivery Ledger",
+    href: "/notification-delivery-ledger",
+    category: "Production Platform",
+    icon: ClipboardList,
+    summary: "Notification Delivery Ledger workspace for domain workflows, approvals, evidence, and reporting in Electricity Demand Data Center Load Planner.",
+    bullets: ["Production controls","Evidence tracking","Launch readiness"],
+    metrics: [
+      { label: "Notification Delivery Ledger", value: "117", note: 'Active records' },
+      { label: 'Exceptions', value: "6", note: 'Need review' },
+      { label: 'Due Soon', value: "8", note: 'Next 14 days' },
+    ],
+  },
+  {
+    slug: "observability-runbooks",
+    title: "Observability & Runbooks",
+    href: "/observability-runbooks",
+    category: "Production Platform",
+    icon: CalendarCheck,
+    summary: "Observability & Runbooks workspace for domain workflows, approvals, evidence, and reporting in Electricity Demand Data Center Load Planner.",
+    bullets: ["Production controls","Evidence tracking","Launch readiness"],
+    metrics: [
+      { label: "Observability & Runbooks", value: "126", note: 'Active records' },
+      { label: 'Exceptions', value: "7", note: 'Need review' },
+      { label: 'Due Soon', value: "9", note: 'Next 14 days' },
+    ],
+  },
+  {
+    slug: "release-test-harness",
+    title: "Release Test Harness",
+    href: "/release-test-harness",
+    category: "Production Platform",
+    icon: PackageCheck,
+    summary: "Release Test Harness workspace for domain workflows, approvals, evidence, and reporting in Electricity Demand Data Center Load Planner.",
+    bullets: ["Production controls","Evidence tracking","Launch readiness"],
+    metrics: [
+      { label: "Release Test Harness", value: "135", note: 'Active records' },
+      { label: 'Exceptions', value: "3", note: 'Need review' },
+      { label: 'Due Soon', value: "10", note: 'Next 14 days' },
+    ],
+  },
+  {
+    slug: "production-gap-workspace",
+    title: "Production Gap Workspace",
+    href: "/production-gap-workspace",
+    category: "Production Platform",
+    icon: Activity,
+    summary: "Production Gap Workspace workspace for domain workflows, approvals, evidence, and reporting in Electricity Demand Data Center Load Planner.",
+    bullets: ["Production controls","Evidence tracking","Launch readiness"],
+    metrics: [
+      { label: "Production Gap Workspace", value: "144", note: 'Active records' },
+      { label: 'Exceptions', value: "4", note: 'Need review' },
+      { label: 'Due Soon', value: "11", note: 'Next 14 days' },
+    ],
+  }
+] as const;
+
+const allFeatures = [...features, ...supplementalFeatures, ...productionPlatformFeatures, ...aiFeatures];
 
 export const primaryNav: NavItem[] = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { label: 'All Features', href: '/features', icon: Blocks },
+  { label: 'Production Readiness', href: '/production-readiness', icon: ShieldCheck },
   { label: 'Documents', href: '/documents', icon: Files },
   { label: 'Source Tables', href: '/source-tables', icon: Database },
   { label: 'Profiles', href: '/profiles', icon: UserRound },
@@ -284,6 +487,8 @@ export const featureNav: NavItem[] = allFeatures.map((feature) => ({ label: feat
 export const featureCatalog: FeatureDefinition[] = allFeatures.map((feature) => ({ title: feature.title, href: feature.href, category: feature.category, summary: feature.summary, bullets: [...feature.bullets] }));
 
 export const featureFamilies = [
+  { name: 'Production Platform Controls', features: ['Enterprise Identity & Access', 'Connector Operations Center', 'Audit Export Center', 'Notification Delivery Ledger', 'Observability & Runbooks', 'Release Test Harness', 'Production Gap Workspace'] },
+  { name: "Energy Load Planning Controls", features: ["Load Forecast Scenarios","Interconnect Queue","Capacity Reservation","PPA & Energy Procurement","Demand Response Plan","Grid Constraint Map","Capex Scenario Board"] },
   {
     "name": "Planning",
     "features": [
@@ -364,7 +569,7 @@ function toPage(feature: (typeof allFeatures)[number]): PageDefinition {
   };
 }
 
-export const pageRegistry: Record<string, PageDefinition> = Object.fromEntries(features.map((feature) => [feature.slug, toPage(feature)]));
+export const pageRegistry: Record<string, PageDefinition> = Object.fromEntries([...features, ...supplementalFeatures, ...productionPlatformFeatures].map((feature) => [feature.slug, toPage(feature)]));
 export const aiFeatureRegistry: Record<string, PageDefinition> = Object.fromEntries(aiFeatures.map((feature) => [feature.slug, toPage(feature)]));
 export const featureContexts: Record<string, FeatureContext> = Object.fromEntries(
   allFeatures.map((feature) => [
