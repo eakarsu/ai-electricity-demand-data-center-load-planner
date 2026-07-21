@@ -27,6 +27,10 @@ function getPool() {
   return pool;
 }
 
+export function getPostgresPool() {
+  return getPool();
+}
+
 function readJsonFallback<T>(file: string, fallback: T): T {
   try {
     if (!fs.existsSync(file)) return fallback;

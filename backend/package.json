@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "migrate": "cd .. && ./start.sh migrate",
+    "test": "node --test ../governance/governance.test.cjs",
     "typecheck": "cd ../frontend && npm run typecheck",
     "smoke": "cd ../frontend && npm run smoke",
     "dev": "cd ../frontend && npm run dev"
   },
-  "notes": "Backend API routes are exposed here and executed by the Next.js full-stack runtime."
+  "notes": "Backend API routes are exposed here and executed by the Next.js full-stack runtime.",
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
 }

@@ -22,4 +22,5 @@ cd ai-electricity-demand-data-center-load-planner/frontend
 npm run dev
 ```
 
-Demo login: `admin@datacenter-load.local` / `admin123`
+Create the first administrator with the explicit BOOTSTRAP_ADMIN_EMAIL,
+BOOTSTRAP_ADMIN_PASSWORD, and BOOTSTRAP_ACKNOWLEDGEMENT environment settings.
