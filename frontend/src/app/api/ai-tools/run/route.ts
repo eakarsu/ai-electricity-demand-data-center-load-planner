@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { aiTools, getAITool } from '@/lib/aiTools';
 import { appendAuditEntry } from '@/lib/auditStore';
 import { requireSession } from '@/lib/requestAuth';
+import { getPostgresPool } from '@/lib/postgres';
 
 async function callConfiguredAI(system: string, prompt: string) {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) return null;
-
-  const baseUrl = process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1';
-  const model = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  const baseUrl = process.env.OPENROUTER_BASE_URL;
+  const model = process.env.OPENROUTER_MODEL;
+  if (!apiKey || !model || baseUrl !== 'https://openrouter.ai/api/v1') throw new Error('OpenRouter is not configured');
   const response = await fetch(baseUrl + '/chat/completions', {
     method: 'POST',
     headers: {
@@ -30,20 +30,9 @@ async function callConfiguredAI(system: string, prompt: string) {
   }
 
   const payload = await response.json();
-  return payload?.choices?.[0]?.message?.content as string | undefined;
-}
-
-function localResponse(toolTitle: string, prompt: string, signals: string[]) {
-  const trimmedPrompt = prompt.trim();
-  return [
-    toolTitle + ' response',
-    '',
-    'Summary: ' + trimmedPrompt.slice(0, 260) + (trimmedPrompt.length > 260 ? '...' : ''),
-    '',
-    'Recommended next actions:',
-    ...signals.slice(0, 4).map((signal, index) => String(index + 1) + '. Review ' + signal + ' and assign an owner.'),
-    String(Math.min(signals.length + 1, 5)) + '. Update the audit trail after the review is accepted.',
-  ].join('\n');
+  const content = String(payload?.choices?.[0]?.message?.content || '').trim();
+  if (!content) throw new Error('AI provider returned empty content');
+  return { content, model };
 }
 
 export async function GET(request: NextRequest) {
@@ -61,24 +50,25 @@ export async function POST(request: NextRequest) {
   const input = body?.input?.trim() || tool.defaultPrompt;
   const system = 'You are ' + tool.title + '. Stay inside this suite workflow. Return concise operational guidance with risks, next actions, and audit notes.';
 
-  let response: string;
-  let provider = 'local-pilot';
   try {
     const aiResponse = await callConfiguredAI(system, input);
-    response = aiResponse || localResponse(tool.title, input, tool.signals);
-    provider = aiResponse ? 'configured-ai' : provider;
-  } catch {
-    response = localResponse(tool.title, input, tool.signals);
-    provider = 'local-fallback';
+    const stored = await getPostgresPool().query<{ id: string }>(
+      `INSERT INTO runtime_ai_results(user_identifier, tool_id, prompt, content, provider, model)
+       VALUES($1, $2, $3, $4, 'openrouter', $5) RETURNING id::text`,
+      [session.email, tool.id, input, aiResponse.content, aiResponse.model],
+    );
+    await appendAuditEntry('AI Tools', ((session.firstName + ' ' + session.lastName).trim() || session.email) + ' ran ' + tool.title);
+    return NextResponse.json({
+      tool,
+      input,
+      response: aiResponse.content,
+      provider: 'openrouter',
+      model: aiResponse.model,
+      persistedId: stored.rows[0].id,
+      createdAt: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error('OpenRouter request failed', error);
+    return NextResponse.json({ error: 'AI provider request failed' }, { status: 502 });
   }
-
-  await appendAuditEntry('AI Tools', ((session.firstName + ' ' + session.lastName).trim() || session.email) + ' ran ' + tool.title);
-
-  return NextResponse.json({
-    tool,
-    input,
-    response,
-    provider,
-    createdAt: new Date().toISOString(),
-  });
 }
